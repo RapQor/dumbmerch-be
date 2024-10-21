@@ -8,27 +8,23 @@ import authorization from "../middlewares/authorization";
 const ProductRoute = Router();
 
 ProductRoute.post(
-  "/products",
+  "/",
   authorization,
   isAdmin,
   upload.single("productPicture"),
   uploadCloudinary,
   ProductController.createProduct
 );
-ProductRoute.get("/products", authorization, ProductController.getProducts);
-ProductRoute.get(
-  "/products/:id",
-  authorization,
-  ProductController.getProductById
-);
+ProductRoute.get("/", authorization, ProductController.getProducts);
+ProductRoute.get("/:id", authorization, ProductController.getProductById);
 ProductRoute.put(
-  "/products/:id",
+  "/:id",
   authorization,
   isAdmin,
   upload.single("productPicture"),
   uploadCloudinary,
   ProductController.updateProduct
 );
-ProductRoute.delete("/products/:id", isAdmin, ProductController.deleteProduct);
+ProductRoute.delete("/:id", isAdmin, ProductController.deleteProduct);
 
 export default ProductRoute;

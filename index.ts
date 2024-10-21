@@ -8,6 +8,8 @@ const cors = require("cors");
 
 import { v2 as cloudinary } from "cloudinary";
 import { allow } from "joi";
+import PurchaseRoute from "./src/routes/PurchaseRoute";
+import ProductRoute from "./src/routes/ProductRoute";
 
 dotenv.config();
 // Initialize the Express application
@@ -22,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/uploads", express.static("src/uploads"));
 
 app.use(route);
+app.use("/", PurchaseRoute, ProductRoute);
 app.use(
   cors({
     origin: "http://localhost:5173/",

@@ -8,6 +8,7 @@ const route = Router();
 
 route.use("/auth", authRoute);
 route.use("/admin", CategoryRoute);
-route.use("/", PurchaseRoute, ProductRoute);
+route.use("/purchases", PurchaseRoute);
+route.use("/products", ProductRoute);
 
 export default route;
