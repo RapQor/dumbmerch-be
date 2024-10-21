@@ -11,7 +11,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     // Verify token
-    const payload = jwt.verify(token, process.env.SECRET_KEY || "secret");
+    const payload = jwt.verify(token, process.env.SECRET_KEY || "secret", {
+      algorithms: ["HS256"],
+    }) as jwt.JwtPayload;
 
     // If the payload is valid, set user in res.locals
     res.locals.user = payload;
