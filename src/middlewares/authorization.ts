@@ -23,6 +23,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     // Handle invalid or expired token
     console.error("Token verification error:", error);
-    res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 };

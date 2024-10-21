@@ -5,9 +5,6 @@ import { IProduct } from "../types/product";
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    console.log("body=", req.body);
-    console.log("file=", req.file);
-
     await productSchema.validateAsync(req.body);
 
     const productPicture = res.locals.productPicture;
@@ -19,7 +16,8 @@ export const createProduct = async (req: Request, res: Response) => {
     };
 
     const createdProduct = await productService.createProduct(newProduct);
-    res.send({
+
+    res.status(201).json({
       message: "Product created successfully",
       product: createdProduct,
     });
@@ -99,11 +97,9 @@ export const deleteProduct = async (req: Request, res: Response) => {
         .status(500)
         .json({ error: `Failed to delete product: ${error.message}` });
     } else {
-      res
-        .status(500)
-        .json({
-          error: "An unknown error occurred while deleting the product",
-        });
+      res.status(500).json({
+        error: "An unknown error occurred while deleting the product",
+      });
     }
   }
 };

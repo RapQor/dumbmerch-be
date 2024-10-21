@@ -27,8 +27,6 @@ export const uploadCloudinary = async (
     return res.status(400).send("No file uploaded");
   }
 
-  profile_pic(profile, res, next);
-
   const productPicture: CloudinaryFile = req.file as CloudinaryFile;
 
   console.log("ini productPicture= ", productPicture);
@@ -92,66 +90,32 @@ const uploadSingle = async (
   next: NextFunction
 ) => {
   try {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        resource_type: "auto",
-        folder: "DUMBMERCH", // Sesuaikan dengan folder yang kamu inginkan
-      } as any,
-      (
-        err: UploadApiErrorResponse | undefined,
-        result: UploadApiResponse | undefined
-      ) => {
-        if (err) {
-          console.error("Cloudinary upload error:", err);
-          return res.status(500).send("Error uploading Product Picture");
-        }
-        if (!result) {
-          console.error("Cloudinary upload error: Result is undefined");
-          return res.status(500).send("Error uploading Product Picture");
-        }
+    cloudinary.uploader
+      .upload_stream(
+        {
+          resource_type: "auto",
+          folder: "DUMBMERCH", // Sesuaikan dengan folder yang kamu inginkan
+        } as any,
+        (
+          err: UploadApiErrorResponse | undefined,
+          result: UploadApiResponse | undefined
+        ) => {
+          if (err) {
+            console.error("Cloudinary upload error:", err);
+            return res.status(500).send("Error uploading Product Picture");
+          }
+          if (!result) {
+            console.error("Cloudinary upload error: Result is undefined");
+            return res.status(500).send("Error uploading Product Picture");
+          }
 
-        res.locals.productPicture = result.secure_url;
-        next();
-      }
-    );
-    uploadStream.end(productPicture.buffer);
+          res.locals.productPicture = result.secure_url;
+        }
+      )
+      .end(productPicture.buffer);
+    next();
   } catch (error) {
     console.log("Error in uploadToCloudinary middleware:", error);
     res.status(500).send("Error uploading Product Picture");
-  }
-};
-
-const profile_pic = async (
-  profile: CloudinaryFile,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        resource_type: "auto",
-        folder: "PCTRN_Profile", // Sesuaikan dengan folder yang kamu inginkan
-      } as any,
-      (
-        err: UploadApiErrorResponse | undefined,
-        result: UploadApiResponse | undefined
-      ) => {
-        if (err) {
-          console.error("Cloudinary upload error:", err);
-          return res.status(500).send("Error uploading image");
-        }
-        if (!result) {
-          console.error("Cloudinary upload error: Result is undefined");
-          return res.status(500).send("Error uploading image");
-        }
-
-        res.locals.profile_pic = result.secure_url;
-        next();
-      }
-    );
-    uploadStream.end(profile.buffer);
-  } catch (error) {
-    console.log("Error in uploadToCloudinary middleware:", error);
-    res.status(500).send("Error uploading image");
   }
 };
