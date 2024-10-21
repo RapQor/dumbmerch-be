@@ -59,7 +59,11 @@ export const getPurchaseByUserId = async (userId: number) => {
   return await db.purchase.findMany({
     where: { userId },
     include: {
-      product: true,
+      product: {
+        include: {
+          productPicture: true,
+        },
+      },
       user: true,
     },
   });
