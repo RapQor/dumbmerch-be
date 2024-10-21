@@ -90,30 +90,29 @@ const uploadSingle = async (
   next: NextFunction
 ) => {
   try {
-    cloudinary.uploader
-      .upload_stream(
-        {
-          resource_type: "auto",
-          folder: "DUMBMERCH", // Sesuaikan dengan folder yang kamu inginkan
-        } as any,
-        (
-          err: UploadApiErrorResponse | undefined,
-          result: UploadApiResponse | undefined
-        ) => {
-          if (err) {
-            console.error("Cloudinary upload error:", err);
-            return res.status(500).send("Error uploading Product Picture");
-          }
-          if (!result) {
-            console.error("Cloudinary upload error: Result is undefined");
-            return res.status(500).send("Error uploading Product Picture");
-          }
-
-          res.locals.productPicture = result.secure_url;
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        resource_type: "auto",
+        folder: "DUMBMERCH", // Sesuaikan dengan folder yang kamu inginkan
+      } as any,
+      (
+        err: UploadApiErrorResponse | undefined,
+        result: UploadApiResponse | undefined
+      ) => {
+        if (err) {
+          console.error("Cloudinary upload error:", err);
+          return res.status(500).send("Error uploading Product Picture");
         }
-      )
-      .end(productPicture.buffer);
-    next();
+        if (!result) {
+          console.error("Cloudinary upload error: Result is undefined");
+          return res.status(500).send("Error uploading Product Picture");
+        }
+
+        res.locals.productPicture = result.secure_url;
+        next();
+      }
+    );
+    uploadStream.end(productPicture.buffer);
   } catch (error) {
     console.log("Error in uploadToCloudinary middleware:", error);
     res.status(500).send("Error uploading Product Picture");

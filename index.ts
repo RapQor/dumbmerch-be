@@ -38,7 +38,6 @@ cloudinary.config({
 
 // Define a route for the root URL ('/') and specify the response
 app.get("/", (req: express.Request, res: express.Response) => {
-  console.log(req.body);
   res.send("okeokeoek");
 });
 
