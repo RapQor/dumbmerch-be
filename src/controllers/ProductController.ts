@@ -23,7 +23,6 @@ export const createProduct = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({ error: "Failed to create product" });
-    console.log(error);
   }
 };
 
@@ -53,8 +52,6 @@ export const getProductById = async (req: Request, res: Response) => {
 export const updateProduct = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    console.log("body=", req.body);
-    console.log("file=", req.file);
 
     await productSchema.validateAsync(req.body);
 

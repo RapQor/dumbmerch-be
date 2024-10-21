@@ -5,9 +5,6 @@ import { purchaseSchema } from "../libs/validations/purchase";
 
 export const createPurchase = async (req: Request, res: Response) => {
   try {
-    console.log("body=", req.body);
-    console.log("headers=", req.headers);
-
     await purchaseSchema.validateAsync(req.body);
 
     const newPurchase: IPurchase = {

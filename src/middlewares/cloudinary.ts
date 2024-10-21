@@ -20,8 +20,6 @@ export const uploadCloudinary = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("uploading");
-
   const profile: CloudinaryFile = req.file as CloudinaryFile;
   if (!profile) {
     return res.status(400).send("No file uploaded");
@@ -29,59 +27,12 @@ export const uploadCloudinary = async (
 
   const productPicture: CloudinaryFile = req.file as CloudinaryFile;
 
-  console.log("ini productPicture= ", productPicture);
-
   const productPictures: CloudinaryFile[] = req.files as CloudinaryFile[];
   if (!productPicture && !productPictures) {
     return res.status(400).send("No file uploaded");
   }
 
-  if (productPicture) {
-    return uploadSingle(productPicture, res, next);
-  } else {
-    return uploadMultiple(productPictures, res, next);
-  }
-};
-
-const uploadMultiple = async (
-  productPictures: CloudinaryFile[],
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const cloudinaryUrls: string[] = [];
-    for (const productPicture of productPictures) {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: "auto",
-          folder: "DUMBMERCH",
-        } as any,
-        (
-          err: UploadApiErrorResponse | undefined,
-          result: UploadApiResponse | undefined
-        ) => {
-          if (err) {
-            console.error("Cloudinary upload error:", err);
-            return next(err);
-          }
-          if (!result) {
-            console.error("Cloudinary upload error: Result is undefined");
-            return next(new Error("Cloudinary upload result is undefined"));
-          }
-          cloudinaryUrls.push(result.secure_url);
-
-          if (cloudinaryUrls.length === productPictures.length) {
-            res.locals.productPictures = cloudinaryUrls;
-            next();
-          }
-        }
-      );
-      uploadStream.end(productPicture.buffer);
-    }
-  } catch (error) {
-    console.error("Error in uploadToCloudinary middleware:", error);
-    next(error);
-  }
+  return uploadSingle(productPicture, res, next);
 };
 
 const uploadSingle = async (
@@ -114,7 +65,6 @@ const uploadSingle = async (
     );
     uploadStream.end(productPicture.buffer);
   } catch (error) {
-    console.log("Error in uploadToCloudinary middleware:", error);
     res.status(500).send("Error uploading Product Picture");
   }
 };

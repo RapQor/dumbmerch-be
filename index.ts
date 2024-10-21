@@ -45,7 +45,6 @@ app.get("/", (req: express.Request, res: express.Response) => {
 app.listen(port, async () => {
   try {
     await db.$connect();
-    console.log(`Server berjalan pada port ${port}`);
   } catch (error) {
     await db.$disconnect();
   }

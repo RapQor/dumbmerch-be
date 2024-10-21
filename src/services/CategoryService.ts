@@ -21,8 +21,6 @@ export const createCategory = async (
     data: category,
   });
 
-  console.log(newCategory);
-
   return newCategory;
 };
 
