@@ -24,7 +24,7 @@ app.use("/uploads", express.static("src/uploads"));
 app.use(route);
 app.use(
   cors({
-    origin: "http://localhost:5173/",
+    origin: "https://dumbmerch-dun.vercel.app/",
     methods: "GET,POST,PATCH,DELETE,OPTIONS",
     allowHeaders: ["Content-Type", "Authorization", "Multipart/form-data"],
   })
